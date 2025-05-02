@@ -1,0 +1,6 @@
+.env
+*.pyc
+__pycache__/
+frontend/.env.local
+backend/__pycache__/
+chroma_db/
