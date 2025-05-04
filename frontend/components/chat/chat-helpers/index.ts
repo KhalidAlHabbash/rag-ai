@@ -156,6 +156,7 @@ export const handleLocalChat = async (
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
   setToolInUse: React.Dispatch<React.SetStateAction<string>>
 ) => {
+  // TODO: RESPONSE GENERATION COMES FROM HERE, THIS IS WHERE YOULL HAVE TO REDIRECT TO YOUR API
   const formattedMessages = await buildFinalMessages(payload, profile, [])
 
   // Ollama API: https://github.com/jmorganca/ollama/blob/main/docs/api.md
