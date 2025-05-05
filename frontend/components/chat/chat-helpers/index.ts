@@ -158,16 +158,11 @@ export const handleLocalChat = async (
 ) => {
   // TODO: RESPONSE GENERATION COMES FROM HERE, THIS IS WHERE YOULL HAVE TO REDIRECT TO YOUR API
   const formattedMessages = await buildFinalMessages(payload, profile, [])
-
   // Ollama API: https://github.com/jmorganca/ollama/blob/main/docs/api.md
   const response = await fetchChatResponse(
-    process.env.NEXT_PUBLIC_OLLAMA_URL + "/api/chat",
+    "http://localhost:8000/ask",
     {
-      model: chatSettings.model,
-      messages: formattedMessages,
-      options: {
-        temperature: payload.chatSettings.temperature
-      }
+      question: formattedMessages[1].content,
     },
     false,
     newAbortController,
@@ -257,9 +252,11 @@ export const fetchChatResponse = async (
 ) => {
   const response = await fetch(url, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(body),
-    signal: controller.signal
-  })
+  });
 
   if (!response.ok) {
     if (response.status === 404 && !isHosted) {
@@ -276,11 +273,13 @@ export const fetchChatResponse = async (
     setChatMessages(prevMessages => prevMessages.slice(0, -2))
   }
 
-  return response
+  const data = await response.json()
+  const answer = data.answer
+  return answer
 }
 
 export const processResponse = async (
-  response: Response,
+  response: string,
   lastChatMessage: ChatMessage,
   isHosted: boolean,
   controller: AbortController,
@@ -288,60 +287,21 @@ export const processResponse = async (
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
   setToolInUse: React.Dispatch<React.SetStateAction<string>>
 ) => {
-  let fullText = ""
-  let contentToAdd = ""
-
-  if (response.body) {
-    await consumeReadableStream(
-      response.body,
-      chunk => {
-        setFirstTokenReceived(true)
-        setToolInUse("none")
-
-        try {
-          contentToAdd = isHosted
-            ? chunk
-            : // Ollama's streaming endpoint returns new-line separated JSON
-              // objects. A chunk may have more than one of these objects, so we
-              // need to split the chunk by new-lines and handle each one
-              // separately.
-              chunk
-                .trimEnd()
-                .split("\n")
-                .reduce(
-                  (acc, line) => acc + JSON.parse(line).message.content,
-                  ""
-                )
-          fullText += contentToAdd
-        } catch (error) {
-          console.error("Error parsing JSON:", error)
+setChatMessages(prev =>
+  prev.map(chatMessage => {
+    if (chatMessage.message.id === lastChatMessage.message.id) {
+      return {
+        ...chatMessage,
+        message: {
+          ...chatMessage.message,
+          content: response
         }
+      }
+    }
+    return chatMessage
+  })
+)
 
-        setChatMessages(prev =>
-          prev.map(chatMessage => {
-            if (chatMessage.message.id === lastChatMessage.message.id) {
-              const updatedChatMessage: ChatMessage = {
-                message: {
-                  ...chatMessage.message,
-                  content: fullText
-                },
-                fileItems: chatMessage.fileItems
-              }
-
-              return updatedChatMessage
-            }
-
-            return chatMessage
-          })
-        )
-      },
-      controller.signal
-    )
-
-    return fullText
-  } else {
-    throw new Error("Response body is null")
-  }
 }
 
 export const handleCreateChat = async (
