@@ -6,14 +6,14 @@ from pydantic import BaseModel
 import requests
 
 embeddings_model = HuggingFaceEmbeddings(model_name = "all-MiniLM-L6-v2")
-vectorstore = Chroma(persist_directory="./watched_documents/chroma_db", embedding_function = embeddings_model)
+vectorstore = Chroma(persist_directory="../watched_documents/chroma_db", embedding_function = embeddings_model)
 
 retriever = vectorstore.as_retriever()
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,           
+    allow_origins=["*"],           
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,38 +22,38 @@ app.add_middleware(
 class QueryResponse(BaseModel):
     question: str
 
-    @app.post("/ask")
-    def generate_response(request: QueryResponse):
-        question = request.question
-        # Fetch relevant docs
-        relevant_docs = retriever.get_relevant_documents(question)
+@app.post("/ask")
+def generate_response(request: QueryResponse):
+    question = request.question
+    # Fetch relevant docs
+    relevant_docs = retriever.get_relevant_documents(question)
 
-        context = "\n\n".join(doc.page_content for doc in relevant_docs)
+    context = "\n\n".join(doc.page_content for doc in relevant_docs)
 
-        # Create prompt
-        prompt = f"""Use the following context to answer the question.
+    # Create prompt
+    prompt = f"""Use the following context to answer the question.
 
-            Context:
-            {context}
+    Context:
+    {context}
 
-            Question: {question}
-            Answer:"""
+    Question: {question}
+    Answer:"""
 
-        try:
-            # Call locally hosted ollama model with prompt
-            res = requests.post("http://localhost:11434/api/generate", json= {
-                "model": "mistral",
-                "prompt": prompt,
-                "stream": false
-            })
+    try:
+        # Call locally hosted ollama model with prompt
+        res = requests.post("http://localhost:11434/api/generate", json= {
+            "model": "mistral",
+            "prompt": prompt,
+            "stream": False
+        })
 
-            # Raise request to check for exceptions
-            res.raise_for_status()
-            answer = res.json()["response"]
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Ollama call failed: {str(e)}")
+        # Raise request to check for exceptions
+        res.raise_for_status()
+        answer = res.json()["response"]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ollama call failed: {str(e)}")
 
-        # Return model response as JSON
-        return {"answer": answer}
+    # Return model response as JSON
+    return {"answer": answer}
 
     
