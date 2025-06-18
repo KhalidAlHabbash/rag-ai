@@ -1,6 +1,6 @@
 # 🧠 RAG File Watcher + FastAPI Q&A (PDF/Text to Vector Store)
 
-This project allows you to ask questions over your **local PDF or text files** using a local LLM via Ollama, FastAPI, and ChromaDB. Just drop your files into the `documents/` folder — they’ll be **automatically indexed**, and you can ask questions using a simple web or API interface.
+This project allows you to ask questions over your **local PDF or text files** using a local LLM via Ollama, FastAPI, and ChromaDB. Just drop your files into the `watched_documents/documents/` folder — they’ll be **automatically indexed**, and you can ask questions using a simple web or API interface.
 
 ## 📦 Features
 
@@ -17,8 +17,8 @@ This project allows you to ask questions over your **local PDF or text files** u
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/rag-project.git
-cd rag-project
+git clone https://github.com/KhalidAlHabbash/rag-ai.git
+cd rag-ai
 ```
 
 ### 2. Create a virtual environment (optional)
@@ -55,11 +55,13 @@ python watch_and_index.py
 uvicorn main:app --reload
 ```
 
-### ✅ Step 4: Head over to frontend directory in your terminal and run:
+### ✅ Step 4: Head over to frontend directory in your terminal and run the frontend UI:
 ```bash
 npm install
 npm run chat
 ```
+
+### ✅ Step 5: Upload your documents to watched_documents/documents folder and voila, you're done. Pop off and start asking the LLM any question!
 
 
 ---
