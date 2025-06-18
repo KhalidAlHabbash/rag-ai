@@ -55,13 +55,9 @@ python watch_and_index.py
 uvicorn main:app --reload
 ```
 
-### ✅ Step 4: Head over to frontend directory in your terminal and run the frontend UI:
-```bash
-npm install
-npm run chat
-```
+### ✅ Step 4: Follow https://github.com/mckaywrigley/chatbot-ui instructions to get the frontend running.
 
-### ✅ Step 5: Upload your documents to watched_documents/documents folder and voila, you're done. Pop off and start asking the LLM any question!
+### ✅ Step 5: Upload your documents to watched_documents/documents folder and voila, you're done. Pop off and start asking the LLM any question :)
 
 
 ---
