@@ -11,7 +11,6 @@ This project allows you to ask questions over your **local PDF or text files** u
 - 🌐 Queries via FastAPI and local LLM (Ollama)  
 - 💬 Chat UI integration using [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
 
-## 🗂️ Project Structure
 
 ## ⚙️ Installation
 
