@@ -31,13 +31,13 @@ source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
-## 🔌 Requirements
+## Requirements
 
 - Python 3.8+  
 - [Ollama](https://ollama.com) installed locally  
 - Models like `llama3` or any other supported local LLM
 
-## 🚀 Run the App (Step-by-Step)
+## Run the App (Step-by-Step)
 
 ### ✅ Step 1: Start Ollama
 ```bash
