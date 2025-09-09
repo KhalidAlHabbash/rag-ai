@@ -1,18 +1,18 @@
-# 🧠 RAG File Watcher + FastAPI Q&A (PDF/Text to Vector Store)
+# RAG File Watcher + FastAPI Q&A (PDF/Text to Vector Store)
 
 This project allows you to ask questions over your **local PDF or text files** using a local LLM via Ollama, FastAPI, and ChromaDB. Just drop your files into the `watched_documents/documents/` folder — they’ll be **automatically indexed**, and you can ask questions using the UI [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui).
 
-## 📦 Features
+## Features
 
-- 📂 Monitors folder for `.pdf` and `.txt` files  
-- ✂️ Splits documents into chunks (500 characters w/ overlap)  
-- 🧠 Embeds with `all-MiniLM-L6-v2` using HuggingFace  
-- 🧱 Stores embeddings in persistent ChromaDB  
-- 🌐 Queries via FastAPI and local LLM (Ollama)  
-- 💬 Chat UI integration using [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
+-  Monitors folder for `.pdf` and `.txt` files  
+-  Splits documents into chunks (500 characters w/ overlap)  
+-  Embeds with `all-MiniLM-L6-v2` using HuggingFace  
+-  Stores embeddings in persistent ChromaDB  
+-  Queries via FastAPI and local LLM (Ollama)  
+-  Chat UI integration using [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
 
 
-## ⚙️ Installation
+## Installation
 
 ### 1. Clone the repo
 ```bash
